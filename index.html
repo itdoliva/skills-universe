@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills network</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+    <link href="./static/style.css" rel="stylesheet">
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="./static/skills.js"></script>
+
+</head>
+<body>
+
+  <svg>
+    <filter id="blur">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="5" />
+    </filter>
+  </svg>
+
+  <script>
+
+    window.d3 = d3;
+
+    const nodes = skills.nodes;
+    const links = skills.links;
+    
+
+    const bubble = {
+      maxStack: 6,
+      minRadius: 5,
+      maxRadius: 80
+    };
+
+    const nodeMaxSize = d3.max(nodes, d => d.size);
+    const nodeSizeStep = nodeMaxSize / bubble.maxStack;
+
+    function count(nodeId) {
+      return links.filter(d => d.source === nodeId || d.target === nodeId).length
+    }
+
+    const svg = d3.select('body svg')
+        .attr('width', '1600px')
+        .attr('height', '1000px');
+
+
+    // Scales
+    const radiusScale = d3.scalePow()
+      .exponent(1)
+      .domain([0, bubble.maxStack])
+      .range([bubble.minRadius, bubble.maxRadius]);
+
+    const colorScale = d3.scaleLinear()
+      .domain([0, bubble.maxStack])
+      .range(['#123D55', '#DB2EBC'])
+      .interpolate(d3.interpolateCubehelix);
+
+    // Construct Forces
+    const forceNode = d3.forceManyBody()
+      .strength(-80);
+
+    const forceLink = d3.forceLink(links)
+      .id(d => d.id)
+      .distance(30);
+
+    const forceCollide = d3.forceCollide()
+      .radius(d => radiusScale(Math.round(d.size / nodeSizeStep)) + 5);
+
+    const forceCenter = d3.forceCenter().x(600).y(500);
+
+    const simulation = d3.forceSimulation(nodes)
+      .force("link", forceLink)
+      .force("charge", forceNode)
+      .force("collision", forceCollide)
+      .force("center",  forceCenter)
+      .on("tick", ticked);
+
+    console.log(nodes, links)
+
+    // Draw
+    const link = svg.append("g")
+      .selectAll("line")
+        .data(links)
+        .enter()
+      .append("line")
+        .attr('class', d => `link id${d.source.id} id${d.target.id}`)
+        .attr('stroke-dasharray', d => d.type === 'field' ? 'none' : '2')
+        .attr("stroke", '#8FA5B0')
+        .attr("stroke-opacity", d => d.type === 'field' ? .3 : .5);
+
+    const node = svg.append("g")
+      .selectAll(".node")
+        .data(nodes)
+        .enter()
+      .append('g')
+        .each(function(d) {
+          let nodeType;
+          if (d.id < 200) { nodeType = 'field' } else 
+          if (d.id < 300) { nodeType = 'language' } else 
+          if (d.id < 400) { nodeType = 'lib' } else 
+          if (d.id < 500) { nodeType = 'software' }; 
+
+          const g = d3.select(this)
+            .attr('class', `node ${nodeType} id${d.id}`);
+
+
+          if (nodeType === 'field') {
+            g.append('circle')
+                .attr('r', d => bubble.maxRadius *.6);
+          } 
+          else if (nodeType === 'language') {
+            g.append('rect')
+              .attr('width', 50)
+              .attr('height', 50)
+              .attr('transform', 'rotate(45 0 0) translate(-25 -25)')
+          } 
+          else if (d.size > 0) {
+            for (let i = Math.round(d.size / nodeSizeStep); i > 0; i--) {
+              g.append('circle')
+                .attr('r', d => radiusScale(i-1))
+                .style('fill', () => colorScale(Math.round(d.size / nodeSizeStep) - i));
+            }
+          }
+
+          g.append('text')
+            .text(d => d.name)
+            .attr('dominant-baseline', 'middle');
+        })
+
+    // Interactivity
+    node
+    .on('mouseenter', function(d, i) {
+      let nodeSelector = '.node';
+      links.forEach(function(link) {
+        if (link.source.id === i.id || link.target.id === i.id) {
+          nodeSelector += `:not(.id${link.source.id})`;
+          nodeSelector += `:not(.id${link.target.id})`;
+        }
+      });
+        
+
+      d3.selectAll(`.link:not(.id${i.id})`)
+        .attr('opacity', 0);
+
+      d3.selectAll(nodeSelector)
+        .attr('opacity', .15);
+    })
+    .on('mouseleave', function(d, i) {
+      d3.selectAll(`.link`)
+        .attr('opacity', 1);
+
+      d3.selectAll(`.node`)
+        .attr('opacity', 1);
+    })
+
+    function ticked() {
+      d3.selectAll('.node')
+        .attr('transform', d => `translate(${d.x}, ${d.y})`);
+
+      d3.selectAll('line')
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y);
+  }
+
+
+  </script>
+  
+    
+</body>
+</html>

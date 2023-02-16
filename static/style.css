@@ -1,0 +1,35 @@
+body {
+    background: #0B1012;
+
+    font-family: 'Raleway', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .node.field circle {
+    fill: #0B1012;
+    stroke: #FBF9F7;
+    font-weight: 400;
+    stroke-width: 3;
+    stroke-opacity: .4;
+  }
+
+  .node:not(.field) circle {
+    fill: #123D55;
+    fill-opacity: .4;
+  }
+
+  .node.language rect {
+    fill: #1590AB;
+    stroke-width: 0;
+  }
+
+  .node.language text {
+    fill: #FBF9F7;
+    font-weight: 600;
+  }
+
+  .node text {
+    text-anchor: middle;
+    fill: #FBF9F7;
+  }
