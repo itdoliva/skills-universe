@@ -1,35 +1,141 @@
 body {
-    background: #0B1012;
 
-    font-family: 'Raleway', sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-  }
+  font-family: 'Raleway', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
 
-  .node.field circle {
-    fill: #0B1012;
-    stroke: #FBF9F7;
-    font-weight: 400;
-    stroke-width: 3;
-    stroke-opacity: .4;
-  }
+  margin: 0;
+  padding: 0;
+}
 
-  .node:not(.field) circle {
-    fill: #123D55;
-    fill-opacity: .4;
-  }
+section.skill-section {
+  width: 100%;
+  min-height: 100vh;
 
-  .node.language rect {
-    fill: #1590AB;
-    stroke-width: 0;
-  }
+  display: flex;
+  align-items: stretch;
+}
 
-  .node.language text {
-    fill: #FBF9F7;
-    font-weight: 600;
-  }
+svg {
+  background: #0B1012;
 
-  .node text {
-    text-anchor: middle;
-    fill: #FBF9F7;
-  }
+  width: 100%;
+}
+
+.orbit-circle {
+  fill: none;
+  stroke: #FBF9F7;
+  stroke-width: .8px;
+}
+
+
+.disable {
+  display: none;
+}
+
+.ana-shape {
+  stroke: #FBF9F7;
+  stroke-width: .75px;
+}
+
+.viz-shape {
+  stroke: #0B1012;
+  stroke-width: .25px;
+  stroke-opacity: .25;
+  fill-opacity: .6;
+}
+
+
+.skills {
+  fill: #FBF9F7;
+  dominant-baseline: middle;
+  font-weight: 400;
+}
+
+.grid-chart .skills {
+  font-size: 12px;
+}
+
+.orbit-chart .skills {
+  text-anchor: middle;
+}
+
+.orbit-chart .ana-shape {
+  stroke-opacity: .6;
+}
+
+
+.grid-chart .grid {
+  stroke: #ADACAB;
+  stroke-opacity: .1;
+}
+
+.grid-chart .shape-void circle {
+  fill: #ADACAB;
+  fill-opacity: .4  ;
+}
+
+.grid-chart .x-legend .x-title {
+  fill: #ADACAB;
+  font-size: 9px;
+}
+
+.grid-chart .x-legend .x-axis path,
+.grid-chart .x-legend .x-axis line {
+  stroke: #ADACAB;
+}
+
+.grid-chart .x-legend .x-axis text {
+  fill: #ADACAB;
+  font-size: 10px;
+}
+
+.grid-chart .y-legend {
+  fill: #FBF9F7;
+  font-size: 11px;
+  text-transform: uppercase;
+  dominant-baseline: middle;
+  opacity: .75;
+  font-weight: 400;
+  letter-spacing: .025rem;
+}
+
+.group-shape :is(rect, circle, path) {
+  fill: #ADACAB;
+  fill-opacity: .4;
+}
+
+.legend-label {
+  font-size: 11px;
+}
+
+.legend-label .legend-desc {
+  fill: #ADACAB;
+}
+
+.legend-label .legend-name {
+  fill: #ADACAB;
+  font-weight: 600;
+}
+
+.disclosure {
+  font-size: 10px;
+  fill: #ADACAB;
+  fill-opacity: .5;
+}
+
+.orbit-center text {
+  font-family: Merriweather, serif;
+  fill: #FBF9F7;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: .1rem;
+  text-transform: uppercase;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+g.node.shape-minor-circle > circle:first-child {
+  stroke: none;
+  filter: drop-shadow(-1px -1px 1px rgba(11, 16, 18, 1));
+}
