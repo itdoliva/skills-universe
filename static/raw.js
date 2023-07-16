@@ -11,8 +11,16 @@ const raw = {
         {
             "id": 301,
             "name": "ReactJS",
+            "relevance": 4,
+            "addiction": 3,
+            "groupId": 2,
+            "vizRelated": 1
+        },
+        {
+            "id": 311,
+            "name": "Svelte",
             "relevance": 5,
-            "addiction": 4,
+            "addiction": 5,
             "groupId": 2,
             "vizRelated": 1
         },
